@@ -3,7 +3,41 @@ ZSH_THEME="robbyrussell"
 
 source $ZSH/oh-my-zsh.sh
 
-# ---- Custom aliases (git + docker) ----
+# ---- Custom aliases ----
+unalias venv 2>/dev/null || true
+
+function venv() {
+  if [[ ! -f requirements.txt ]]; then
+    echo "Error: requirements.txt not found in $(pwd)"
+    return 1
+  fi
+
+  if typeset -f deactivate >/dev/null 2>&1; then
+    deactivate
+  fi
+
+  if [[ -d .venv ]]; then
+    rm -rf .venv || return 1
+  fi
+
+  uv venv .venv || return 1
+  if [[ -f .venv/bin/activate ]]; then
+    source .venv/bin/activate
+  else
+    echo "Error: .venv/bin/activate was not created"
+    return 1
+  fi
+
+  uv pip install -r requirements.txt || return 1
+}
+
+# Alembic aliases
+alias au='uv run alembic upgrade head'
+alias ad='uv run alembic downgrade -1'
+alias acu='uv run alembic current'
+alias als='uv run alembic history'
+alias areva='uv run alembic revision --autogenerate -m'
+
 # Git aliases
 alias g='git'
 alias ga='git add'
@@ -18,6 +52,7 @@ alias gf='git fetch'
 alias gfa='git fetch --all --prune'
 alias gfo='git fetch origin'
 alias gpu='git pull'
+
 function gfp {
   git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
     echo "Error: Not in a git repository"
@@ -84,6 +119,7 @@ function gfp {
     echo "Run 'gfp --force' to delete these local branches."
   fi
 }
+
 # Protected git push - prevents pushing to main/master
 function gp {
   local current_branch=$(git branch --show-current 2>/dev/null)
@@ -101,6 +137,7 @@ function gp {
   
   git push --set-upstream origin "$current_branch" "$@"
 }
+
 alias gmom='git merge origin/main'
 alias gst='git status'
 alias gsts='git status --short'
@@ -207,3 +244,15 @@ function grho() {
 
 
 . "$HOME/.local/bin/env"
+
+alias python=python3
+
+# Ruff via uv
+alias uvrr='uv run ruff'
+
+function gwc() {
+  git worktree list | tail -n +2 | awk '{print $1}' | while read -r wt; do
+    echo "Removing: $wt"
+    git worktree remove --force "$wt"
+  done
+}
