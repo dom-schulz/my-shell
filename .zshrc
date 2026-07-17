@@ -250,9 +250,28 @@ alias python=python3
 # Ruff via uv
 alias uvrr='uv run ruff'
 
+# uv run wrapper: `uvr <cmd> [args...]` -> `uv run <cmd> [args...]`.
+# If <cmd> is an existing alias (e.g. acu), expand it first and strip a
+# leading `uv run ` so `uvr acu` also resolves to `uv run alembic current`.
+function uvr() {
+  if [[ $# -eq 0 ]]; then
+    echo "Usage: uvr <command> [args...]"
+    return 1
+  fi
+
+  local cmd="$1"; shift
+
+  if [[ -n "${aliases[$cmd]}" ]]; then
+    local expansion="${aliases[$cmd]#uv run }"
+    uv run ${(z)expansion} "$@"
+  else
+    uv run "$cmd" "$@"
+  fi
+}
+
 function gwc() {
   git worktree list | tail -n +2 | awk '{print $1}' | while read -r wt; do
     echo "Removing: $wt"
-    git worktree remove --force "$wt"
+    git worktree remove --force --force "$wt"
   done
 }
