@@ -97,6 +97,11 @@ source ~/.zshrc
 
 ## Usage
 
+## Keyboard Remapping
+
+The optional [keyd keyboard configuration](keyd/README.md) provides
+Mac-like shortcuts for the built-in Ubuntu laptop keyboard.
+
 - **Setup**: `ms setup`
 - **List Env**: `ms <repo_alias> env ls` (or `<repo-alias> env ls` if integrated)
 - **Modify Env**: `ms <repo_alias> env set <KEY>` (or `<repo-alias> env set <KEY>` if integrated)
