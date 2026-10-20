@@ -13,7 +13,9 @@ Mac keyboard while leaving the Logitech K780 and right Alt unchanged.
 - Left Alt + Shift + Z maps to redo.
 - Left Alt + S/F maps to save/find.
 - Left Alt + L maps to Ctrl+L, including Chrome's address bar.
+- Left Alt + N maps to new window, including Ghostty via its Ctrl+N keybind.
 - Left Alt + T/W maps to new tab/close tab or window.
+- Left Alt + 1-9 selects tabs (9 jumps to the last tab).
 - Right Alt, left Ctrl, Fn, and the Logitech K780 are not remapped.
 
 The device ID is specific to the built-in keyboard on this laptop:
