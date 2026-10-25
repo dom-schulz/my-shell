@@ -33,7 +33,7 @@ keybind = super+arrow_down=goto_split:down
 # Use the existing Alt+C/V keyd translations as terminal copy/paste.
 # Preserve Ctrl+C as an interrupt when there is no selection to copy.
 keybind = performable:ctrl+c=copy_to_clipboard
-keybind = ctrl+v=paste_from_clipboard
+keybind = performable:ctrl+v=paste_from_clipboard
 
 # Use the Alt+N keyd translation to open a new window.
 keybind = ctrl+n=new_window
