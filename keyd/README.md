@@ -15,7 +15,11 @@ Mac keyboard while leaving the Logitech K780 and right Alt unchanged.
 - Left Alt + L maps to Ctrl+L, including Chrome's address bar.
 - Left Alt + Shift + L maps to Super+L, which locks the screen in GNOME.
 - Left Alt + N maps to new window, including Ghostty via its Ctrl+N keybind.
-- Left Alt + T/W maps to new tab/close tab or window.
+- Left Alt + T/W maps to new tab/close tab or window, including Ghostty via its
+  Ctrl+W keybind.
+- Left Alt + D splits a Ghostty pane right, and Left Alt + Shift + D splits it
+  down. They send Ctrl+Alt+Super+D and Ctrl+Alt+Shift+Super+D, which only
+  Ghostty binds, so they do nothing in other apps.
 - Left Alt + 1-9 selects tabs (9 jumps to the last tab).
 - Right Alt, left Ctrl, Fn, and the Logitech K780 are not remapped.
 
