@@ -16,3 +16,6 @@ keybind = performable:ctrl+v=paste_from_clipboard
 
 # Use the Alt+N keyd translation to open a new window.
 keybind = ctrl+n=new_window
+
+# Use the Alt+W keyd translation to close the current split, tab, or window.
+keybind = ctrl+w=close_surface
