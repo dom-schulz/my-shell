@@ -18,7 +18,8 @@ Mac keyboard while leaving the Logitech K780 and right Alt unchanged.
 - Left Alt + T/W maps to new tab/close tab or window, including Ghostty via its
   Ctrl+W keybind.
 - Left Alt + D splits a Ghostty pane right, and Left Alt + Shift + D splits it
-  down, via Ghostty's Super+D and Super+Shift+D keybinds.
+  down. They send Ctrl+Alt+Super+D and Ctrl+Alt+Shift+Super+D, which only
+  Ghostty binds, so they do nothing in other apps.
 - Left Alt + 1-9 selects tabs (9 jumps to the last tab).
 - Right Alt, left Ctrl, Fn, and the Logitech K780 are not remapped.
 
@@ -46,13 +47,6 @@ sudo /usr/bin/keyd.rvaiya reload
 
 The keyd service is enabled by the package and persists across reboots.
 
-GNOME uses Super+D to show the desktop, which stops Ghostty from receiving
-Left Alt + D. Remove that shortcut, keeping the Ctrl+Super+D and Ctrl+Alt+D ones:
-
-```bash
-gsettings set org.gnome.desktop.wm.keybindings show-desktop "['<Primary><Super>d', '<Primary><Alt>d']"
-```
-
 ## Test
 
 Check the service:
@@ -78,10 +72,4 @@ To restore a prior configuration instead:
 ```bash
 sudo cp -a /etc/keyd.backup-YYYYMMDD-HHMMSS/. /etc/keyd/
 sudo /usr/bin/keyd.rvaiya reload
-```
-
-To restore GNOME's Super+D shortcut:
-
-```bash
-gsettings reset org.gnome.desktop.wm.keybindings show-desktop
 ```
