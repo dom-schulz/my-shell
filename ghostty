@@ -9,6 +9,11 @@ keybind = super+arrow_right=goto_split:right
 keybind = super+arrow_up=goto_split:up
 keybind = super+arrow_down=goto_split:down
 
+# Use left Alt+D and left Alt+Shift+D to split right and down. Requires removing
+# GNOME's Super+D show-desktop shortcut; see keyd/README.md.
+keybind = super+d=new_split:right
+keybind = super+shift+d=new_split:down
+
 # Use the existing Alt+C/V keyd translations as terminal copy/paste.
 # Preserve Ctrl+C as an interrupt when there is no selection to copy.
 keybind = performable:ctrl+c=copy_to_clipboard
@@ -16,3 +21,6 @@ keybind = performable:ctrl+v=paste_from_clipboard
 
 # Use the Alt+N keyd translation to open a new window.
 keybind = ctrl+n=new_window
+
+# Use the Alt+W keyd translation to close the current split, tab, or window.
+keybind = ctrl+w=close_surface
