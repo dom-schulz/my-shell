@@ -108,3 +108,8 @@ Mac-like shortcuts for the built-in Ubuntu laptop keyboard.
 - **Sync Venvs**: `ms venv sync` (or `venv sync` if integrated)
 - **Docker Compose**: `<repo-alias> dcu` (or other docker commands)
 - **Alembic**: `alem current` (or any alembic command - automatically uses db-alembic repo)
+
+## Ghostty Clipboard
+
+The optional [Ghostty clipboard handoff](clipboard/README.md) stops pastes of
+text copied from Ghostty from hanging Chrome tabs and VS Code on X11.

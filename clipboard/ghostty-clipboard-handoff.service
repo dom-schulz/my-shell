@@ -1,0 +1,12 @@
+[Unit]
+Description=Hand Ghostty's X11 clipboard over to xclip
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/ghostty-clipboard-handoff
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target
