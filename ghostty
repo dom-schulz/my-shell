@@ -1,4 +1,4 @@
-theme = light:my-light,dark:Adwaita Dark
+theme = light:my-light,dark:my-dark
 
 cursor-style = block
 shell-integration-features = no-cursor
