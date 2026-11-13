@@ -101,16 +101,15 @@ source ~/.zshrc
 
 `claude/statusline.sh` renders two lines. Line 1: model (effort), repo@branch
 with +/- line changes (worktrees show their parent repo name), then context
-window (ctx), 5h and 7d usage, each as an 8-segment bar plus percentage. Line 2: the full directory
-path. It reads only the JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones
-readable on both light and dark backgrounds.
+window (ctx), 5h and 7d usage, each as a quarter-step pie glyph plus a
+percentage colored by level. Line 2: the full directory path. It reads only the
+JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones readable
+on both light and dark backgrounds.
 
-Enable it in `~/.claude/settings.json`. `refreshInterval` (seconds) re-runs the
-script on a timer so the bar colors follow light/dark switches without new
-messages:
+Enable it in `~/.claude/settings.json`:
 
 ```json
-"statusLine": { "type": "command", "command": "~/projects/my-shell/claude/statusline.sh", "refreshInterval": 5 }
+"statusLine": { "type": "command", "command": "~/projects/my-shell/claude/statusline.sh" }
 ```
 
 ## Keyboard Remapping

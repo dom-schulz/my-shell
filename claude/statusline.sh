@@ -71,40 +71,22 @@ if [ -n "$cwd" ]; then
     fi
 fi
 
-# Faint grey for unused bar segments, matched to the macOS appearance Ghostty follows.
-if [ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" = "Dark" ]; then
-    empty='\033[38;2;58;60;66m'
-else
-    empty='\033[38;2;218;220;225m'
-fi
-
-# Segmented bar, filled proportionally in a muted usage color, rest faint grey.
-bar_segments=8
-usage_bar() {
-    local pct=$1 color filled i bar=""
-    # Muted versions of usage_color so the bar reads softer than the percentage.
-    if   [ "$pct" -ge 90 ]; then color='\033[38;2;205;120;120m'
-    elif [ "$pct" -ge 70 ]; then color='\033[38;2;215;150;105m'
-    elif [ "$pct" -ge 50 ]; then color='\033[38;2;195;165;85m'
-    else color='\033[38;2;110;165;120m'
-    fi
-    filled=$(( (pct * bar_segments + 50) / 100 ))
-    [ "$filled" -gt "$bar_segments" ] && filled=$bar_segments
-    for (( i = 0; i < bar_segments; i++ )); do
-        if [ "$i" -lt "$filled" ]; then bar+="${color}▉${reset}"; else bar+="${empty}▉${reset}"; fi
-    done
-    echo "$bar"
+# Pie glyph in quarter steps (empty, 1/4, 1/2, 3/4, full) in the usage color.
+usage_pie() {
+    local pies=(○ ◔ ◑ ◕ ●) i=$(( ($1 + 12) / 25 ))
+    [ "$i" -gt 4 ] && i=4
+    echo "$(usage_color "$1")${pies[$i]}${reset}"
 }
 
 # Context tokens
-out+="${sep}${label}ctx${reset} $(usage_bar "$pct_used") $(usage_color "$pct_used")${pct_used}%${reset}"
+out+="${sep}${label}ctx${reset} $(usage_pie "$pct_used") $(usage_color "$pct_used")${pct_used}%${reset}"
 
 # Rate limits (usage only)
 for pair in "5h:$five_pct" "7d:$seven_pct"; do
     name=${pair%%:*}; pct=${pair#*:}
     [ -z "$pct" ] && continue
     pct=$(printf "%.0f" "$pct")
-    out+="${sep}${label}${name}${reset} $(usage_bar "$pct") $(usage_color "$pct")${pct}%${reset}"
+    out+="${sep}${label}${name}${reset} $(usage_pie "$pct") $(usage_color "$pct")${pct}%${reset}"
 done
 
 [ -n "$line2" ] && out+="\n${line2}"
