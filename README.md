@@ -99,9 +99,10 @@ source ~/.zshrc
 
 ## Claude Code Status Line
 
-`claude/statusline.sh` renders one line: model (effort), dir@branch with
-+/- line changes (repo wt:worktree@branch inside a linked worktree), context tokens, and 5h/7d usage as a 10-segment bar plus percentage. It reads only
-the JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones
+`claude/statusline.sh` renders two lines. Line 1: model (effort), repo@branch
+with +/- line changes (worktrees show their parent repo name), context tokens,
+and 5h/7d usage as a 10-segment bar plus percentage. Line 2: the full directory
+path. It reads only the JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones
 readable on both light and dark backgrounds.
 
 Enable it in `~/.claude/settings.json`. `refreshInterval` (seconds) re-runs the
