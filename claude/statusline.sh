@@ -79,7 +79,14 @@ fi
 # Context tokens
 out+="${sep}${orange}$(format_tokens "$current")/$(format_tokens "$size")${reset} ${dim}(${reset}$(usage_color "$pct_used")${pct_used}%${reset}${dim})${reset}"
 
-# 10-segment bar: one segment per 10% used, filled in the usage color, rest dim.
+# Faint grey for unused bar segments, matched to the macOS appearance Ghostty follows.
+if [ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" = "Dark" ]; then
+    empty='\033[38;2;58;60;66m'
+else
+    empty='\033[38;2;218;220;225m'
+fi
+
+# 10-segment bar: one segment per 10% used, filled in a muted usage color, rest faint grey.
 usage_bar() {
     local pct=$1 color filled i bar=""
     # Muted versions of usage_color so the bar reads softer than the percentage.
@@ -91,7 +98,7 @@ usage_bar() {
     filled=$(( (pct + 5) / 10 ))
     [ "$filled" -gt 10 ] && filled=10
     for (( i = 0; i < 10; i++ )); do
-        if [ "$i" -lt "$filled" ]; then bar+="${color}▉${reset}"; else bar+="${dim}▉${reset}"; fi
+        if [ "$i" -lt "$filled" ]; then bar+="${color}▉${reset}"; else bar+="${empty}▉${reset}"; fi
     done
     echo "$bar"
 }
