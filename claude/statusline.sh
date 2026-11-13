@@ -18,17 +18,6 @@ dim='\033[2m'
 reset='\033[0m'
 sep=" ${dim}|${reset} "
 
-format_tokens() {
-    local n=$1
-    if [ "$n" -ge 1000000 ]; then
-        awk "BEGIN {v=sprintf(\"%.1f\",$n/1000000)+0; if(v==int(v)) printf \"%dm\",v; else printf \"%.1fm\",v}"
-    elif [ "$n" -ge 1000 ]; then
-        awk "BEGIN {printf \"%.0fk\", $n/1000}"
-    else
-        printf "%d" "$n"
-    fi
-}
-
 usage_color() {
     if   [ "$1" -ge 90 ]; then echo "$red"
     elif [ "$1" -ge 70 ]; then echo "$orange"
@@ -65,17 +54,16 @@ out="${purple}${model_name}${reset}"
 [ "$effort" = "medium" ] && effort="med"
 [ -n "$effort" ] && out+=" ${dim}(${effort})${reset}"
 
-# dir@branch (+added -deleted); in a linked worktree: repo wt:worktree-dir@branch
+# repo@branch (+added -deleted); full directory path on line 2.
+# The repo name comes from the shared .git dir, so worktrees show their parent repo.
 if [ -n "$cwd" ]; then
-    { read -r branch; read -r git_dir; read -r common_dir; read -r toplevel; } < <(
-        git -C "$cwd" rev-parse --path-format=absolute --abbrev-ref HEAD --git-dir --git-common-dir --show-toplevel 2>/dev/null
+    { read -r branch; read -r common_dir; } < <(
+        git -C "$cwd" rev-parse --path-format=absolute --abbrev-ref HEAD --git-common-dir 2>/dev/null
     )
-    if [ -n "$git_dir" ] && [ "$git_dir" != "$common_dir" ]; then
-        repo=${common_dir%/.git}
-        out+="${sep}${cyan}${repo##*/}${reset} ${dim}wt:${reset}${yellow}${toplevel##*/}${reset}"
-    else
-        out+="${sep}${cyan}${cwd##*/}${reset}"
-    fi
+    name=${cwd##*/}
+    [ -n "$common_dir" ] && { repo=${common_dir%/.git}; name=${repo##*/}; }
+    out+="${sep}${cyan}${name}${reset}"
+    line2="${dim}${cwd/#$HOME/~}${reset}"
     if [ -n "$branch" ]; then
         out+="${dim}@${reset}${green}${branch}${reset}"
         stat=$(git -C "$cwd" diff --numstat 2>/dev/null | awk '{a+=$1; d+=$2} END {if (a+d>0) printf "+%d -%d", a, d}')
@@ -83,39 +71,32 @@ if [ -n "$cwd" ]; then
     fi
 fi
 
-# Context tokens
-out+="${sep}${orange}$(format_tokens "$current")/$(format_tokens "$size")${reset} ${dim}(${reset}$(usage_color "$pct_used")${pct_used}%${reset}${dim})${reset}"
-
-# Faint grey for unused bar segments, matched to the macOS appearance Ghostty follows.
-if [ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" = "Dark" ]; then
-    empty='\033[38;2;58;60;66m'
-else
-    empty='\033[38;2;218;220;225m'
-fi
-
-# 10-segment bar: one segment per 10% used, filled in a muted usage color, rest faint grey.
-usage_bar() {
-    local pct=$1 color filled i bar=""
-    # Muted versions of usage_color so the bar reads softer than the percentage.
-    if   [ "$pct" -ge 90 ]; then color='\033[38;2;205;120;120m'
-    elif [ "$pct" -ge 70 ]; then color='\033[38;2;215;150;105m'
-    elif [ "$pct" -ge 50 ]; then color='\033[38;2;195;165;85m'
-    else color='\033[38;2;110;165;120m'
-    fi
-    filled=$(( (pct + 5) / 10 ))
-    [ "$filled" -gt 10 ] && filled=10
-    for (( i = 0; i < 10; i++ )); do
-        if [ "$i" -lt "$filled" ]; then bar+="${color}▉${reset}"; else bar+="${empty}▉${reset}"; fi
-    done
-    echo "$bar"
+# Pie glyph in quarter steps: empty, 1/4, 1/2, 3/4, full.
+usage_pie() {
+    local pies=(○ ◔ ◑ ◕ ●) i=$(( ($1 + 12) / 25 ))
+    [ "$i" -gt 4 ] && i=4
+    echo "${pies[$i]}"
 }
+
+# Context gets tighter thresholds than rate limits: yellow over 20%, orange over 30%, red over 40%.
+ctx_color() {
+    if   [ "$1" -gt 40 ]; then echo "$red"
+    elif [ "$1" -gt 30 ]; then echo "$orange"
+    elif [ "$1" -gt 20 ]; then echo "$yellow"
+    else echo "$green"
+    fi
+}
+
+# Context tokens
+out+="${sep}${label}ctx${reset} $(ctx_color "$pct_used")$(usage_pie "$pct_used") ${pct_used}%${reset}"
 
 # Rate limits (usage only)
 for pair in "5h:$five_pct" "7d:$seven_pct"; do
     name=${pair%%:*}; pct=${pair#*:}
     [ -z "$pct" ] && continue
     pct=$(printf "%.0f" "$pct")
-    out+="${sep}${label}${name}${reset} $(usage_bar "$pct") $(usage_color "$pct")${pct}%${reset}"
+    out+="${sep}${label}${name}${reset} $(usage_color "$pct")$(usage_pie "$pct") ${pct}%${reset}"
 done
 
+[ -n "$line2" ] && out+="\n${line2}"
 printf "%b" "$out"
