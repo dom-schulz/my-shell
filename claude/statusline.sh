@@ -78,9 +78,10 @@ usage_pie() {
     echo "${pies[$i]}"
 }
 
-# Context gets tighter thresholds than rate limits: yellow over 20%, red over 30%.
+# Context gets tighter thresholds than rate limits: yellow over 20%, orange over 30%, red over 40%.
 ctx_color() {
-    if   [ "$1" -gt 30 ]; then echo "$red"
+    if   [ "$1" -gt 40 ]; then echo "$red"
+    elif [ "$1" -gt 30 ]; then echo "$orange"
     elif [ "$1" -gt 20 ]; then echo "$yellow"
     else echo "$green"
     fi
