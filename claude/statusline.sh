@@ -61,12 +61,12 @@ if [ -z "$effort" ]; then
 fi
 
 # Model (effort)
-out="${blue}${model_name}${reset}"
+out="${purple}${model_name}${reset}"
 if [ -n "$effort" ]; then
     case "$effort" in
         low)    ec="$dim" ;;
         medium) ec="$orange"; effort="med" ;;
-        xhigh)  ec="$purple" ;;
+        xhigh)  ec="$blue" ;;
         max)    ec="$red" ;;
         *)      ec="$green" ;;
     esac
