@@ -71,22 +71,30 @@ if [ -n "$cwd" ]; then
     fi
 fi
 
-# Pie glyph in quarter steps (empty, 1/4, 1/2, 3/4, full) in the usage color.
+# Pie glyph in quarter steps: empty, 1/4, 1/2, 3/4, full.
 usage_pie() {
     local pies=(○ ◔ ◑ ◕ ●) i=$(( ($1 + 12) / 25 ))
     [ "$i" -gt 4 ] && i=4
-    echo "$(usage_color "$1")${pies[$i]}${reset}"
+    echo "${pies[$i]}"
+}
+
+# Context gets tighter thresholds than rate limits: yellow over 20%, red over 30%.
+ctx_color() {
+    if   [ "$1" -gt 30 ]; then echo "$red"
+    elif [ "$1" -gt 20 ]; then echo "$yellow"
+    else echo "$green"
+    fi
 }
 
 # Context tokens
-out+="${sep}${label}ctx${reset} $(usage_pie "$pct_used") $(usage_color "$pct_used")${pct_used}%${reset}"
+out+="${sep}${label}ctx${reset} $(ctx_color "$pct_used")$(usage_pie "$pct_used") ${pct_used}%${reset}"
 
 # Rate limits (usage only)
 for pair in "5h:$five_pct" "7d:$seven_pct"; do
     name=${pair%%:*}; pct=${pair#*:}
     [ -z "$pct" ] && continue
     pct=$(printf "%.0f" "$pct")
-    out+="${sep}${label}${name}${reset} $(usage_pie "$pct") $(usage_color "$pct")${pct}%${reset}"
+    out+="${sep}${label}${name}${reset} $(usage_color "$pct")$(usage_pie "$pct") ${pct}%${reset}"
 done
 
 [ -n "$line2" ] && out+="\n${line2}"
