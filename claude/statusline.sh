@@ -79,12 +79,24 @@ fi
 # Context tokens
 out+="${sep}${orange}$(format_tokens "$current")/$(format_tokens "$size")${reset} ${dim}(${reset}$(usage_color "$pct_used")${pct_used}%${reset}${dim})${reset}"
 
+# 10-segment bar: one segment per 10% used, filled in the usage color, rest dim.
+usage_bar() {
+    local pct=$1 color filled i bar=""
+    color=$(usage_color "$pct")
+    filled=$(( (pct + 5) / 10 ))
+    [ "$filled" -gt 10 ] && filled=10
+    for (( i = 0; i < 10; i++ )); do
+        if [ "$i" -lt "$filled" ]; then bar+="${color}▮${reset}"; else bar+="${dim}▮${reset}"; fi
+    done
+    echo "$bar"
+}
+
 # Rate limits (usage only)
 for pair in "5h:$five_pct" "7d:$seven_pct"; do
     name=${pair%%:*}; pct=${pair#*:}
     [ -z "$pct" ] && continue
     pct=$(printf "%.0f" "$pct")
-    out+="${sep}${label}${name}${reset} $(usage_color "$pct")${pct}%${reset}"
+    out+="${sep}${label}${name}${reset} $(usage_bar "$pct") $(usage_color "$pct")${pct}%${reset}"
 done
 
 printf "%b" "$out"
