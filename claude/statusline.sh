@@ -82,7 +82,12 @@ out+="${sep}${orange}$(format_tokens "$current")/$(format_tokens "$size")${reset
 # 10-segment bar: one segment per 10% used, filled in the usage color, rest dim.
 usage_bar() {
     local pct=$1 color filled i bar=""
-    color=$(usage_color "$pct")
+    # Muted versions of usage_color so the bar reads softer than the percentage.
+    if   [ "$pct" -ge 90 ]; then color='\033[38;2;205;120;120m'
+    elif [ "$pct" -ge 70 ]; then color='\033[38;2;215;150;105m'
+    elif [ "$pct" -ge 50 ]; then color='\033[38;2;195;165;85m'
+    else color='\033[38;2;110;165;120m'
+    fi
     filled=$(( (pct + 5) / 10 ))
     [ "$filled" -gt 10 ] && filled=10
     for (( i = 0; i < 10; i++ )); do
