@@ -104,10 +104,12 @@ source ~/.zshrc
 the JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones
 readable on both light and dark backgrounds.
 
-Enable it in `~/.claude/settings.json`:
+Enable it in `~/.claude/settings.json`. `refreshInterval` (seconds) re-runs the
+script on a timer so the bar colors follow light/dark switches without new
+messages:
 
 ```json
-"statusLine": { "type": "command", "command": "~/projects/my-shell/claude/statusline.sh" }
+"statusLine": { "type": "command", "command": "~/projects/my-shell/claude/statusline.sh", "refreshInterval": 5 }
 ```
 
 ## Keyboard Remapping
