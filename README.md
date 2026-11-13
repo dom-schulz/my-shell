@@ -97,6 +97,21 @@ source ~/.zshrc
 
 ## Usage
 
+## Claude Code Status Line
+
+`claude/statusline.sh` renders one line: model (effort), dir@branch with
++/- line changes (repo wt:worktree@branch inside a linked worktree), context tokens, and 5h/7d usage as a 10-segment bar plus percentage. It reads only
+the JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones
+readable on both light and dark backgrounds.
+
+Enable it in `~/.claude/settings.json`. `refreshInterval` (seconds) re-runs the
+script on a timer so the bar colors follow light/dark switches without new
+messages:
+
+```json
+"statusLine": { "type": "command", "command": "~/projects/my-shell/claude/statusline.sh", "refreshInterval": 5 }
+```
+
 ## Keyboard Remapping
 
 The optional [keyd keyboard configuration](keyd/README.md) provides

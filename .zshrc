@@ -275,3 +275,6 @@ function gwc() {
     git worktree remove --force --force "$wt"
   done
 }
+
+# Let the terminal own mouse selection in Claude Code fullscreen, so Ghostty selection colors apply.
+export CLAUDE_CODE_DISABLE_MOUSE=1
