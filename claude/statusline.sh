@@ -65,14 +65,15 @@ out="${purple}${model_name}${reset}"
 [ "$effort" = "medium" ] && effort="med"
 [ -n "$effort" ] && out+=" ${dim}(${effort})${reset}"
 
-# dir@branch (+added -deleted); in a linked worktree: repo wt:worktree-dir@branch
+# dir@branch (+added -deleted); in a linked worktree: repo@branch, worktree dir on line 2
 if [ -n "$cwd" ]; then
     { read -r branch; read -r git_dir; read -r common_dir; read -r toplevel; } < <(
         git -C "$cwd" rev-parse --path-format=absolute --abbrev-ref HEAD --git-dir --git-common-dir --show-toplevel 2>/dev/null
     )
     if [ -n "$git_dir" ] && [ "$git_dir" != "$common_dir" ]; then
         repo=${common_dir%/.git}
-        out+="${sep}${cyan}${repo##*/}${reset} ${dim}wt:${reset}${yellow}${toplevel##*/}${reset}"
+        out+="${sep}${cyan}${repo##*/}${reset}"
+        line2="${dim}wt:${reset} ${yellow}${toplevel##*/}${reset}"
     else
         out+="${sep}${cyan}${cwd##*/}${reset}"
     fi
@@ -118,4 +119,5 @@ for pair in "5h:$five_pct" "7d:$seven_pct"; do
     out+="${sep}${label}${name}${reset} $(usage_bar "$pct") $(usage_color "$pct")${pct}%${reset}"
 done
 
+[ -n "$line2" ] && out+="\n${line2}"
 printf "%b" "$out"
