@@ -18,17 +18,6 @@ dim='\033[2m'
 reset='\033[0m'
 sep=" ${dim}|${reset} "
 
-format_tokens() {
-    local n=$1
-    if [ "$n" -ge 1000000 ]; then
-        awk "BEGIN {v=sprintf(\"%.1f\",$n/1000000)+0; if(v==int(v)) printf \"%dm\",v; else printf \"%.1fm\",v}"
-    elif [ "$n" -ge 1000 ]; then
-        awk "BEGIN {printf \"%.0fk\", $n/1000}"
-    else
-        printf "%d" "$n"
-    fi
-}
-
 usage_color() {
     if   [ "$1" -ge 90 ]; then echo "$red"
     elif [ "$1" -ge 70 ]; then echo "$orange"
@@ -108,7 +97,7 @@ usage_bar() {
 }
 
 # Context tokens
-out+="${sep}${orange}$(format_tokens "$current")/$(format_tokens "$size")${reset} $(usage_bar "$pct_used") $(usage_color "$pct_used")${pct_used}%${reset}"
+out+="${sep}${label}ctx${reset} $(usage_bar "$pct_used") $(usage_color "$pct_used")${pct_used}%${reset}"
 
 # Rate limits (usage only)
 for pair in "5h:$five_pct" "7d:$seven_pct"; do
