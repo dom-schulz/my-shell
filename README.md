@@ -97,6 +97,19 @@ source ~/.zshrc
 
 ## Usage
 
+## Claude Code Status Line
+
+`claude/statusline.sh` renders one line: model (effort), dir@branch with
++/- line changes, context tokens, and 5h/7d usage percentages. It reads only
+the JSON Claude Code passes on stdin and needs `jq`. Colors are mid-tones
+readable on both light and dark backgrounds.
+
+Enable it in `~/.claude/settings.json`:
+
+```json
+"statusLine": { "type": "command", "command": "~/projects/my-shell/claude/statusline.sh" }
+```
+
 ## Keyboard Remapping
 
 The optional [keyd keyboard configuration](keyd/README.md) provides
