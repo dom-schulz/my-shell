@@ -62,16 +62,8 @@ fi
 
 # Model (effort)
 out="${purple}${model_name}${reset}"
-if [ -n "$effort" ]; then
-    case "$effort" in
-        low)    ec="$dim" ;;
-        medium) ec="$orange"; effort="med" ;;
-        xhigh)  ec="$blue" ;;
-        max)    ec="$red" ;;
-        *)      ec="$green" ;;
-    esac
-    out+=" ${dim}(${reset}${ec}${effort}${reset}${dim})${reset}"
-fi
+[ "$effort" = "medium" ] && effort="med"
+[ -n "$effort" ] && out+=" ${dim}(${effort})${reset}"
 
 # dir@branch (+added -deleted)
 if [ -n "$cwd" ]; then
