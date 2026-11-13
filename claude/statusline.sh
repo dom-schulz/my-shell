@@ -86,7 +86,7 @@ usage_bar() {
     filled=$(( (pct + 5) / 10 ))
     [ "$filled" -gt 10 ] && filled=10
     for (( i = 0; i < 10; i++ )); do
-        if [ "$i" -lt "$filled" ]; then bar+="${color}▉${reset}"; else bar+="${dim}▉${reset}"; fi
+        if [ "$i" -lt "$filled" ]; then bar+="${color}▊${reset}"; else bar+="${dim}▊${reset}"; fi
     done
     echo "$bar"
 }
