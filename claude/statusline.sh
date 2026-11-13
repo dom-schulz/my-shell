@@ -65,10 +65,17 @@ out="${purple}${model_name}${reset}"
 [ "$effort" = "medium" ] && effort="med"
 [ -n "$effort" ] && out+=" ${dim}(${effort})${reset}"
 
-# dir@branch (+added -deleted)
+# dir@branch (+added -deleted); in a linked worktree: repo wt:worktree-dir@branch
 if [ -n "$cwd" ]; then
-    out+="${sep}${cyan}${cwd##*/}${reset}"
-    branch=$(git -C "$cwd" rev-parse --abbrev-ref HEAD 2>/dev/null)
+    { read -r branch; read -r git_dir; read -r common_dir; read -r toplevel; } < <(
+        git -C "$cwd" rev-parse --path-format=absolute --abbrev-ref HEAD --git-dir --git-common-dir --show-toplevel 2>/dev/null
+    )
+    if [ -n "$git_dir" ] && [ "$git_dir" != "$common_dir" ]; then
+        repo=${common_dir%/.git}
+        out+="${sep}${cyan}${repo##*/}${reset} ${dim}wt:${reset}${yellow}${toplevel##*/}${reset}"
+    else
+        out+="${sep}${cyan}${cwd##*/}${reset}"
+    fi
     if [ -n "$branch" ]; then
         out+="${dim}@${reset}${green}${branch}${reset}"
         stat=$(git -C "$cwd" diff --numstat 2>/dev/null | awk '{a+=$1; d+=$2} END {if (a+d>0) printf "+%d -%d", a, d}')
