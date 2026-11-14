@@ -8,11 +8,11 @@ input=$(cat)
 # Mid-tone colors chosen to stay readable on both light and dark backgrounds.
 blue='\033[38;2;30;120;220m'
 orange='\033[38;2;215;100;20m'
-green='\033[38;2;20;140;60m'
-cyan='\033[38;2;0;130;140m'
+green='\033[92m'   # palette bright green: vivid in both ghostty themes
+dir_blue='\033[01;34m'  # bold palette blue, the old directory color
 red='\033[38;2;210;50;50m'
 yellow='\033[38;2;175;125;0m'
-purple='\033[38;2;130;80;220m'
+purple='\033[1;38;2;130;80;220m'
 label='\033[1m'
 dim='\033[2m'
 reset='\033[0m'
@@ -62,7 +62,7 @@ if [ -n "$cwd" ]; then
     )
     name=${cwd##*/}
     [ -n "$common_dir" ] && { repo=${common_dir%/.git}; name=${repo##*/}; }
-    out+="${sep}${cyan}${name}${reset}"
+    out+="${sep}${dir_blue}${name}${reset}"
     line2="${dim}${cwd/#$HOME/~}${reset}"
     if [ -n "$branch" ]; then
         out+="${dim}@${reset}${green}${branch}${reset}"
