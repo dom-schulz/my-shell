@@ -1,7 +1,7 @@
 # keyd keyboard remapping
 
-This configuration makes the built-in HP laptop keyboard behave more like a
-Mac keyboard while leaving the Logitech K780 and right Alt unchanged.
+This configuration makes the built-in HP laptop keyboard and the Logitech K780
+behave more like a Mac keyboard while leaving right Alt unchanged.
 
 ## What it does
 
@@ -21,10 +21,16 @@ Mac keyboard while leaving the Logitech K780 and right Alt unchanged.
   down. They send Ctrl+Alt+Super+D and Ctrl+Alt+Shift+Super+D, which only
   Ghostty binds, so they do nothing in other apps.
 - Left Alt + 1-9 selects tabs (9 jumps to the last tab).
-- Right Alt, left Ctrl, Fn, and the Logitech K780 are not remapped.
+- Right Alt, left Ctrl, and Fn are not remapped.
 
-The device ID is specific to the built-in keyboard on this laptop:
-`0001:0001:3ca03456`.
+The device IDs match by vendor and product only: the built-in keyboard
+(`0001:0001`) and the Logitech K780 over its Unifying receiver (`046d:405b`)
+and Bluetooth (`046d:b33b`). The K780 must be in PC mode (Fn+P); Mac mode
+swaps the keys next to the space bar. keyd's full IDs include a trailing hash
+(`0001:0001:xxxxxxxx`) that can change after a kernel update or reboot, which
+makes keyd silently ignore the keyboard. If remaps stop working, run
+`journalctl -u keyd -b` and look for `DEVICE: ignoring ... (AT Translated Set 2
+keyboard)`.
 
 ## Install
 
