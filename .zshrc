@@ -278,3 +278,20 @@ function gwc() {
 
 # Let the terminal own mouse selection in Claude Code fullscreen, so Ghostty selection colors apply.
 export CLAUDE_CODE_DISABLE_MOUSE=1
+
+# ---- Syntax highlighting: commands turn green when they exist, red when they don't ----
+# Install: macOS `brew install zsh-syntax-highlighting`, Ubuntu `sudo apt install zsh-syntax-highlighting`.
+# Must stay at the end of .zshrc.
+for f in \
+  /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; do
+  if [[ -r "$f" ]]; then
+    source "$f"
+    # Don't underline paths
+    ZSH_HIGHLIGHT_STYLES[path]=none
+    ZSH_HIGHLIGHT_STYLES[path_prefix]=none
+    break
+  fi
+done
+unset f
