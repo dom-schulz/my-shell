@@ -124,3 +124,8 @@ Mac-like shortcuts for the built-in Ubuntu laptop keyboard.
 - **Sync Venvs**: `ms venv sync` (or `venv sync` if integrated)
 - **Docker Compose**: `<repo-alias> dcu` (or other docker commands)
 - **Alembic**: `alem current` (or any alembic command - automatically uses db-alembic repo)
+
+## zsh
+
+`.zshrc` is the macOS/Ubuntu entry point: oh-my-zsh, then `zsh/aliases.zsh`, then syntax highlighting.
+Shared aliases and functions live in `zsh/aliases.zsh`. nixos-config reads that file (plus `claude/statusline.sh` and the Ghostty config) as a flake input, so add new aliases there.
