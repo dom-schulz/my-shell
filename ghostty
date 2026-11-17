@@ -3,11 +3,18 @@ theme = light:my-light,dark:my-dark
 cursor-style = block
 shell-integration-features = no-cursor
 
-# Use left Alt (emitted as Super by keyd) to move focus between splits.
-keybind = super+arrow_left=goto_split:left
-keybind = super+arrow_right=goto_split:right
-keybind = super+arrow_up=goto_split:up
-keybind = super+arrow_down=goto_split:down
+# Cmd+Option+arrows move between splits (Ghostty's macOS default; on Linux,
+# keyd sends Super+Alt for left Alt + left Super). Cmd+arrows stay free for
+# line navigation.
+keybind = super+alt+arrow_left=goto_split:left
+keybind = super+alt+arrow_right=goto_split:right
+keybind = super+alt+arrow_up=goto_split:up
+keybind = super+alt+arrow_down=goto_split:down
+
+# Option+Backspace deletes the previous word (keyd sends Ctrl+Backspace on Linux).
+keybind = ctrl+backspace=text:\x17
+# Cmd+Backspace deletes to the start of the line (keyd sends Shift+Home first).
+keybind = shift+home=text:\x15
 
 # Use the Alt+D and Alt+Shift+D keyd translations to split right and down.
 keybind = ctrl+alt+super+d=new_split:right

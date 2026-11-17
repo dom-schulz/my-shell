@@ -6,7 +6,13 @@ behave more like a Mac keyboard while leaving right Alt unchanged.
 ## What it does
 
 - Left Alt acts as Super/Meta.
-- Left Super is disabled.
+- Left Super (where Option is on a Mac) is an Option-style layer:
+  - Left Super + Left/Right jumps by word; add Shift to select by word.
+  - Left Super + Backspace/Delete deletes by word.
+- Ctrl + Left Super + Left/Right snaps the window to the left/right half,
+  and Up maximizes. These match Rectangle's Ctrl + Option keys.
+- Ctrl + Left Super + Left Alt + Left/Right moves the window to the other
+  monitor, matching Rectangle's Ctrl + Option + Cmd keys.
 - Left Alt opens GNOME overview/search.
 - Left Alt + C/V/X maps to copy/paste/cut.
 - Left Alt + A/Z maps to select all/undo.
@@ -20,6 +26,10 @@ behave more like a Mac keyboard while leaving right Alt unchanged.
 - Left Alt + D splits a Ghostty pane right, and Left Alt + Shift + D splits it
   down. They send Ctrl+Alt+Super+D and Ctrl+Alt+Shift+Super+D, which only
   Ghostty binds, so they do nothing in other apps.
+- Left Alt + Left/Right jumps to the start/end of the line, Up/Down to the
+  top/bottom of the document; add Shift to select. Left Alt + Backspace
+  deletes to the start of the line.
+- Left Alt + Left Super + arrows move between Ghostty splits.
 - Left Alt + 1-9 selects tabs (9 jumps to the last tab).
 - Right Alt, left Ctrl, and Fn are not remapped.
 
