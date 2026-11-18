@@ -278,3 +278,15 @@ function gwc() {
 # Let the terminal own mouse selection in Claude Code fullscreen, so Ghostty selection colors apply.
 export CLAUDE_CODE_DISABLE_MOUSE=1
 
+
+# ---- dkrv ----
+# dkrv's project shell (t) sets DKRV_PROJECT; show it in front of the prompt
+# so it's clear that `exit` goes back to dkrv. Regular terminals are unchanged.
+if [[ -n "$DKRV_PROJECT" ]]; then
+  _dkrv_prompt() {
+    local tag="%F{cyan}[${DKRV_PROJECT}]%f "
+    [[ "$PROMPT" == "$tag"* ]] || PROMPT="$tag$PROMPT"
+  }
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd _dkrv_prompt
+fi
